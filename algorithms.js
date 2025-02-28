@@ -170,6 +170,76 @@ function countingSort(arr) {
     return result;
 }
 
+function pangrams(s) {
+    // Write your code here
+    s = s.toLowerCase();
+    var hashMap = new Map();
+    if(s.length < 26) {
+        return "not pangram";
+    }
+    for(var i=0; i<s.length;i++) {
+        if(!hashMap.has(s[i])) {
+            hashMap.set(s[i], 1);
+        }
+    }
+    
+    if(hashMap.size == 27) {
+        return "pangram";
+    } else {
+        return "not pangram";
+    }
+}
+
+function twoArrays(k, A, B) {
+    // Write your code here
+    var tmp = [];
+    for(var i = 0; i<A.length; i++) {
+        tmp.push(A[i]);
+    }
+    tmp.sort((a,b) => a-b);
+    B.sort((a,b) => b-a);
+    while(tmp.length > 0) {
+        var smaller = tmp.pop();
+        var larger = B.pop();
+        if (!(smaller+larger >= k)) {
+            return "NO";
+        }
+    }
+    if(!((B.length == 0) && (tmp.length == 0))) {
+        return "NO";
+    }
+    return "YES";
+}
+
+function birthday(s, d, m) {
+    // Write your code here
+    var combinations = 0;
+    var j = -1;
+    var queue = [];
+    var sum = 0;
+    for(var i=0; i<s.length-m+1; i++) {
+        if(s[i] <= d) {
+            if(j == -1) {
+                for(j=i; j < m+i; j++) {
+                    queue.push(s[j]);
+                    sum = sum + s[j];
+                }j--;
+            } else {
+                var deleted = queue.shift();
+                sum = sum - deleted;
+                j++;
+                queue.push(s[j]);
+                sum = sum + s[j];
+            }
+            if(sum == d) {
+                combinations++;
+            }
+        
+        }
+    }
+    return combinations;
+}
+
 
 //minMax([1, 2, 0, -2, -2]);
 //plusMinus([1, 2, 0, -2, -2])
@@ -181,3 +251,6 @@ function countingSort(arr) {
 //console.log(flippingBits(1));
 //console.log(diagonalDifference([[1,2,3],[4,5,6],[9,8,9]]));
 //console.log(countingSort([1, 2, 1, 3, 4,3, 5,12, 4]));
+//console.log(pangrams("We promptly judged antique ivory buckles for the next prize"));
+//console.log(twoArrays(5, [1, 2, 2, 1], [3, 3, 3, 4]));
+console.log(birthday([2,2,1,3,2,2,1,1], 4, 3));
