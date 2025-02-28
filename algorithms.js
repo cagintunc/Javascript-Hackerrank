@@ -146,7 +146,28 @@ function diagonalDifference(arr) {
 
 function countingSort(arr) {
     // Write your code here
-    
+    var result = [];
+    var hashMap = new Map();
+    var maxVal = -1;
+    for(var i = 0; i < arr.length; i++) {
+        var element = arr[i];
+        if(maxVal < element) {
+            maxVal = element;
+        }
+        if(hashMap.has(element)) {
+            hashMap.set(element, hashMap.get(element)+1);
+        } else {
+            hashMap.set(element, 1);
+        }
+    }
+    for(i = 0; i <= 100; i++) {
+        if(hashMap.has(i)) {
+            result.push(hashMap.get(i));
+        } else {
+            result.push(0);
+        }
+    }
+    return result;
 }
 
 
@@ -159,3 +180,4 @@ function countingSort(arr) {
 //console.log(lonelyinteger([1,1,2,3,3,4,2,5, 10, 5, 10]));
 //console.log(flippingBits(1));
 //console.log(diagonalDifference([[1,2,3],[4,5,6],[9,8,9]]));
+//console.log(countingSort([1, 2, 1, 3, 4,3, 5,12, 4]));
