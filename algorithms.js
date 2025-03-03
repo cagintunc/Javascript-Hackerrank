@@ -276,7 +276,42 @@ function flippingMatrix(matrix) {
     return sum;
 }
 
+function staircase(n) {
+    // Write your code here
+    for(var i = 1; i < n+1; i++) {
+        var line = "";
+        for(var j=0;j<n-i;j++) {
+            line += " ";
+        }
+        for(;j<n;j++) {
+            line += "#";
+        }
+        console.log(line);
+    }
+}
 
+function miniMaxSum(arr) {
+    // Write your code here
+    var min = Number.MAX_SAFE_INTEGER;
+    var max = Number.MIN_SAFE_INTEGER;
+    var sum = 0;
+    for(var i = 0; i < arr.length; i++) {
+        sum+=arr[i];
+        if(arr[i] < min) {
+            min = arr[i];
+        }
+        if(arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    minn = sum-max;
+    maxx = sum-min;
+    console.log(minn+" "+maxx);
+}
+
+miniMaxSum([7, 69, 2, 221, 8974]);
+
+//staircase(4);
 //console.log(flippingMatrix([[112,42,83,119],[56,125,56,49],[15,78,101,43],[62,98,114,108]]))
 //console.log(findMedian([2,6,3,8,3,9,10]));
 //minMax([1, 2, 0, -2, -2]);
