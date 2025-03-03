@@ -309,8 +309,28 @@ function miniMaxSum(arr) {
     console.log(minn+" "+maxx);
 }
 
-miniMaxSum([7, 69, 2, 221, 8974]);
+function sockMerchant(n, ar) {
+    // Write your code here
+    var hashMap = new Map();
+    var result = 0;
+    for(var i = 0; i < ar.length; i++) {
+        if(hashMap.has(ar[i])) {
+            hashMap.set(ar[i], hashMap.get(ar[i])+1);
+        } else {
+            hashMap.set(ar[i],1);
+        }
+    }
+    var keys = Array.from(hashMap.keys());
+    for(var i = 0; i < keys.length; i++) {
+        var current = hashMap.get(keys[i]);
+        result += Math.floor(current/2);
+    }
+    return result;
+}
 
+sockMerchant(9, [10, 20, 20, 10, 10, 30, 50, 10, 20]);
+
+//miniMaxSum([7, 69, 2, 221, 8974]);
 //staircase(4);
 //console.log(flippingMatrix([[112,42,83,119],[56,125,56,49],[15,78,101,43],[62,98,114,108]]))
 //console.log(findMedian([2,6,3,8,3,9,10]));
