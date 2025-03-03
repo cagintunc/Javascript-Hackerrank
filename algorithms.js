@@ -240,7 +240,45 @@ function birthday(s, d, m) {
     return combinations;
 }
 
+function stringXOR(s, t) {
+    var result = "";
+    for(var i = 0; i<s.length; i++) {
+        if(s[i] == t[i]) {
+            result = result + "0";
+        } else {
+            result = result + "1";
+        }
+    }
+    return result;
+}
 
+function findMedian(arr) {
+    // Write your code here
+    arr.sort((a,b) => a-b);
+    var len = arr.length;
+    var medium_index = Math.floor(len/2);
+    return arr[medium_index];
+}
+
+function flippingMatrix(matrix) {
+    // Write your code here
+    var sum = 0;
+    for(var row=0; row<matrix.length/2; row++) {
+        for(var col=0; col<matrix[0].length/2; col++) {
+            sum += Math.max(
+                matrix[row][col],
+                matrix[matrix.length-row-1][col],
+                matrix[row][matrix[0].length-col-1],
+                matrix[matrix.length-row-1][matrix[0].length-col-1]
+            );
+        }
+    }
+    return sum;
+}
+
+
+//console.log(flippingMatrix([[112,42,83,119],[56,125,56,49],[15,78,101,43],[62,98,114,108]]))
+//console.log(findMedian([2,6,3,8,3,9,10]));
 //minMax([1, 2, 0, -2, -2]);
 //plusMinus([1, 2, 0, -2, -2])
 //timeConversion("12:45:00AM");
@@ -253,4 +291,6 @@ function birthday(s, d, m) {
 //console.log(countingSort([1, 2, 1, 3, 4,3, 5,12, 4]));
 //console.log(pangrams("We promptly judged antique ivory buckles for the next prize"));
 //console.log(twoArrays(5, [1, 2, 2, 1], [3, 3, 3, 4]));
-console.log(birthday([2,2,1,3,2,2,1,1], 4, 3));
+//console.log(birthday([2,2,1,3,2,2,1,1], 4, 3));
+//console.log(stringXOR("01011101","00101100"));
+
