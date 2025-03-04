@@ -328,8 +328,63 @@ function sockMerchant(n, ar) {
     return result;
 }
 
-sockMerchant(9, [10, 20, 20, 10, 10, 30, 50, 10, 20]);
+function kangaroo(x1, v1, x2, v2) {
+    // Write your code here
+    if(x1 == x2) {
+        return "YES";
+    }
+    else if(((x1 < x2)&&(v1 <= v2))||((x2 < x1)&&(v2 <= v1))){
+        return "NO";
+    }
+    else {
+        return kangaroo(x1+v1, v1, x2+v2, v2);
+    }
+}
 
+
+
+function getTotalX(a, b) {
+    // Write your code here
+    var max_1 = Number.MIN_SAFE_INTEGER;
+    var min_2 = Number.MAX_SAFE_INTEGER;
+    var occurrences = 0;
+    
+    for(var i = 0; i < a.length; i++) {
+        var current = a[i];
+        if(current > max_1) {
+            max_1 = current;
+        }
+    }
+    for(var i = 0; i < b.length; i++) {
+        var current = b[i];
+        if(current < min_2) {
+            min_2 = current;
+        }
+    }
+    for(var i = max_1; i <= min_2; i++) {
+        var is_proper = true;
+        for(var j = 0; j < a.length; j++) {
+            if(i%a[j] != 0) {
+                is_proper = false;
+                break;
+            } 
+        }
+        for(var j = 0; j < b.length; j++) {
+            if(b[j]%i != 0) {
+                is_proper = false;
+                break;
+            }
+        }
+        if(is_proper) {
+            occurrences++;
+        }
+    }
+    return occurrences;
+}
+
+//console.log(getTotalX([2, 6, 4], [12, 24, 36]));
+//console.log(kangaroo(0, 3, 4, 2));
+//sockMerchant(9, [10, 20, 20, 10, 10, 30, 50, 10, 20]);
 //miniMaxSum([7, 69, 2, 221, 8974]);
 //staircase(4);
 //console.log(flippingMatrix([[112,42,83,119],[56,125,56,49],[15,78,101,43],[62,98,114,108]]))
