@@ -341,8 +341,6 @@ function kangaroo(x1, v1, x2, v2) {
     }
 }
 
-
-
 function getTotalX(a, b) {
     // Write your code here
     var max_1 = Number.MIN_SAFE_INTEGER;
@@ -382,6 +380,45 @@ function getTotalX(a, b) {
     return occurrences;
 }
 
+
+function findZigZagSequence(a, n) {
+    var mid = Math.floor(n/2);
+    for(var i = mid; i > 0; i--) {
+        var max = a[i];
+        var max_index = i;
+        for(var j = i-1; j >= 0; j--) {
+            console.log(max + " " + a[j]);
+            if(max < a[j]) {
+                max_index = j;
+                max = a[j];
+            }
+        }
+        var temp = a[i];
+        a[i] = max;
+        a[max_index] = temp;
+    }
+
+    if(n%3 != 0) {
+        mid++;
+    }
+    for(var i = mid; i < a.length-1; i++) {
+        var max = a[i];
+        var max_index = i;
+        for(var j = i+1; j <a.length; j++) {
+            if(a[j] > max) {
+                max = a[j];
+                max_index = j;
+            }
+        }
+        var temp = a[i];
+        a[i] = a[max_index];
+        a[max_index] = temp;
+    }
+    return a;
+}
+
+
+console.log(findZigZagSequence([1,5,2,16,3,7, 56], 5));
 //console.log(getTotalX([2, 6, 4], [12, 24, 36]));
 //console.log(kangaroo(0, 3, 4, 2));
 //sockMerchant(9, [10, 20, 20, 10, 10, 30, 50, 10, 20]);
