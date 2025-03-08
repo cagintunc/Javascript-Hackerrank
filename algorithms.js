@@ -507,11 +507,37 @@ function towerBreakers(n, m) {
         }
         p++;
     }
+}
 
+function caesarCipher(s, k) {
+    // Write your code here
+    var alphabet = "abcdefghijklmnopqrstuvwxyz";
+    var upper_alphabet = alphabet.toUpperCase();
+    if(k >= alphabet.length) {
+        k = k%alphabet.length;
+    }
+    var rotated_alphabet = alphabet.substring(k, s.lenght)+alphabet.substring(0, k);
+    var upper_rotated = rotated_alphabet.toUpperCase();
+
+    var result = "";
+    for(var i = 0; i <s.length; i++) {
+        var char = s.charAt(i);
+        if(upper_alphabet.includes(char)) {
+            var index = upper_alphabet.indexOf(char);
+            result += upper_rotated[index];
+        } else if (alphabet.includes(char)){
+            var index = alphabet.indexOf(char);
+            result += rotated_alphabet[index];
+        } else {
+            result += char;
+        }  
+    }
+    return result;
 }
 
 
-console.log(towerBreakers(304311,611791));
+console.log(caesarCipher("DNFjxo?b5h*5<LWbgs6?V5{3M].1hG)pv1VWq4(!][DZ3G)riSJ.CmUj9]7Gzl?VyeJ2dIPEW4GYW*scT8(vhu9wCr]q!7eyaoy.", 45))
+//console.log(towerBreakers(301,611791));
 //console.log(pageCount(100, 5));
 //console.log(findZigZagSequence([1,5,2,16,3,7, 56], 5));
 //console.log(getTotalX([2, 6, 4], [12, 24, 36]));
