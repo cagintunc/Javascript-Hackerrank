@@ -463,8 +463,55 @@ function pageCount(n, p) {
     return Math.min(from_init, from_last);
 }
 
+function towerBreakers(n, m) {
+    // Write your code here
+    var hashMap = new Map();
+    
+    for(var i=0;i<n;i++) {
+        hashMap.set(i, m);
+    }
+    var p=0;
+    while(true) {
+        var is_it_found = false;
+        if((p%2 == 0) && (n%2 != 0)) {
+            for(var i = 0; i < n; i++) {
+                var current = hashMap.get(i);
+                if(current > 1) {
+                    hashMap.set(i, 1);
+                    is_it_found = true;
+                    break;
+                }
+            }
+        }
+        else {
+            for(var i = 0; i < n; i++) {
+                var current = hashMap.get(i);
+                for(var j = current-1; j > 1; j--) {
+                    if(current%j == 0) {
+                        is_it_found = true;
+                        hashMap.set(i, hashMap.get(i)-j);
+                        break;
+                    }
+                }
+                if(is_it_found) {
+                    break;
+                }
+            }
+        }
+        if(!is_it_found) {
+            if(p%2 == 0) {
+                return 2;
+            }else {
+                return 1;
+            }
+        }
+        p++;
+    }
+
+}
 
 
+console.log(towerBreakers(304311,611791));
 //console.log(pageCount(100, 5));
 //console.log(findZigZagSequence([1,5,2,16,3,7, 56], 5));
 //console.log(getTotalX([2, 6, 4], [12, 24, 36]));
