@@ -417,8 +417,56 @@ function findZigZagSequence(a, n) {
     return a;
 }
 
+function pageCount(n, p) {
+    // Write your code here
+    var is_odd = n%2 != 0;
+    var from_last = 0;
+    var min_from_last = 0;
+    var from_init = 0;
+    var min_from_init = 0;
+    var tmp_var = 0;
 
-console.log(findZigZagSequence([1,5,2,16,3,7, 56], 5));
+    if(p == 1) {
+        return 0;
+    }
+
+    from_init++;
+
+    if (is_odd) {
+        tmp_var = 2;
+        if((p == n) ||(p == n-1)) {
+            return 0;
+        }
+        from_last++;
+    }
+    else {
+        tmp_var = 1;
+        if(p == n) {
+            return 0;
+        }
+        from_last++;
+    }
+    for(var i = 2; i < n+1; i=i+2) {
+        if((p == i) || (p == i+1)) {
+            min_from_init = from_init;
+            break;
+        }
+        from_init++;
+    }
+    for(var i = n-tmp_var; i > 1; i=i-2) {
+        if((p == i) ||(p == i-1)) {
+            min_from_last = from_last;
+            break;
+        }
+        from_last++;
+    }
+    return Math.min(from_init, from_last);
+}
+
+
+
+//console.log(pageCount(100, 5));
+//console.log(findZigZagSequence([1,5,2,16,3,7, 56], 5));
 //console.log(getTotalX([2, 6, 4], [12, 24, 36]));
 //console.log(kangaroo(0, 3, 4, 2));
 //sockMerchant(9, [10, 20, 20, 10, 10, 30, 50, 10, 20]);
