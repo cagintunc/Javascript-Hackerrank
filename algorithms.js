@@ -535,8 +535,103 @@ function caesarCipher(s, k) {
     return result;
 }
 
+function maxMin(k, a) {
+    var sorted_array = a.sort((a, b) => a-b)
+    var minValue = Number.MAX_SAFE_INTEGER;
+    for (var i=0; i < sorted_array.length-k+1; i++) {
+        var difference = a[i+k-1] - a[i];
+        if (minValue > difference) {
+            minValue = difference;
+        }
+    }
+    return minValue;
+}
 
-console.log(caesarCipher("DNFjxo?b5h*5<LWbgs6?V5{3M].1hG)pv1VWq4(!][DZ3G)riSJ.CmUj9]7Gzl?VyeJ2dIPEW4GYW*scT8(vhu9wCr]q!7eyaoy.", 45))
+function dynamicArray(n, queries) {
+    // Write your code here
+    var arr = []
+    for (var i = 0; i < n; i++) {
+        arr.push([])
+    }
+    var lastAnswer = 0;
+    for(var i=0; i < queries.length; i++) {
+        var idx;
+        current = queries[i];
+        if(Number(current[0]) == 1) {
+            idx = ((Number(current[1])^lastAnswer)) % n
+            arr[idx].push(Number(current[2]))
+        } else if(Number(current[0]) == 2) {
+            idx = ((Number(current[1])^lastAnswer)) % n
+            lastAnswer = arr[idx][Number(current[2]) % arr[idx].length]
+            console.log(lastAnswer);
+        }
+    }
+}
+
+function gridChallenge(grid) {
+    // Write your code here
+    var hashMap = new Map();
+    var characters = "abcdefghijklmnopqrstuvwxyz".split("");
+    for(var i = 0; i < characters.length; i++) {
+        hashMap[characters[i]] = i;
+    }
+    var new_array = [];
+    for(var i=0; i<grid.length; i++) {
+        var current = grid[i].split("");
+        for(var k = 0; k < current.length-1; k++) {
+            var min_index = k;
+            var min_val = current[k];
+            for(var g = k+1; g <current.length; g++) {
+                if (hashMap[min_val] > hashMap[current[g]]) {
+                    min_index = g;
+                    min_val = current[g];
+                }
+            }
+            current[min_index] = current[k];
+            current[k] = min_val;
+        }
+        new_array.push(current);
+    }
+    console.log(new_array);
+    
+    var row = 0;
+    var col = 0;
+    var tmp_array = [];
+    for (var i= 0; i < grid[0].length; i++) {
+        tmp_array.push("");
+    }
+
+    while(row < grid.length) {
+        tmp_array[col]= tmp_array[col] + new_array[row][col];
+        col = (col+1) % grid[0].length;
+        if (col==0) {
+            row++;
+        }
+    }
+    console.log(tmp_array);
+    for(var row = 0; row < tmp_array.length; row++) {
+        for(var col = 0; col <tmp_array[row].length-1; col++) {
+            if(hashMap[tmp_array[row][col]] > hashMap[tmp_array[row][col+1]]) {
+                return "NO";
+            }
+        }
+    } 
+    
+    return "YES";
+}
+
+
+console.log(gridChallenge(["nyx",
+    "ynx",
+    "xyt"]));
+
+    //nxy
+    //nxy
+    //txy
+    
+//dynamicArray(2, [[1, 0, 5], [1, 1, 7], [1, 0, 3],[2, 1, 0],[2, 1, 1]])
+//console.log(maxMin(3, [100,200,300,350,400,401,402]));
+//console.log(caesarCipher("DNFjxo?b5h*5<LWbgs6?V5{3M].1hG)pv1VWq4(!][DZ3G)riSJ.CmUj9]7Gzl?VyeJ2dIPEW4GYW*scT8(vhu9wCr]q!7eyaoy.", 45))
 //console.log(towerBreakers(301,611791));
 //console.log(pageCount(100, 5));
 //console.log(findZigZagSequence([1,5,2,16,3,7, 56], 5));
