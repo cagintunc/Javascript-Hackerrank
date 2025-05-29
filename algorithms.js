@@ -592,7 +592,6 @@ function gridChallenge(grid) {
         }
         new_array.push(current);
     }
-    console.log(new_array);
     
     var row = 0;
     var col = 0;
@@ -608,7 +607,6 @@ function gridChallenge(grid) {
             row++;
         }
     }
-    console.log(tmp_array);
     for(var row = 0; row < tmp_array.length; row++) {
         for(var col = 0; col <tmp_array[row].length-1; col++) {
             if(hashMap[tmp_array[row][col]] > hashMap[tmp_array[row][col+1]]) {
@@ -621,14 +619,79 @@ function gridChallenge(grid) {
 }
 
 
-console.log(gridChallenge(["nyx",
-    "ynx",
-    "xyt"]));
 
-    //nxy
-    //nxy
-    //txy
+function findSubstring(string1, string2) {
+    function hash(x) {
+        var result = 0;
+        for(var i = 0; i < x.length; i++) {
+            var pow = x.length-i-1;
+            result += map.get(x[i]) * (n ** pow);
+
+        }
+        return result;
+    }
     
+    var map = new Map();
+    var n = 1;
+    for(var i = 0; i < string1.length; i++) {
+        if(!map.has(string1[i])) {
+            map.set(string1[i], n);
+            n++;
+        }
+    }
+
+    var target = hash(string1);
+    console.log("target: " + target);
+    var latest_one = null;
+    var tmp = 0;
+    for(var i = 0; i < string2.length-string1.length+1; i++) {
+        if (map.has(string2[i])) {
+            if (!latest_one) {
+                
+                latest_one = map.get(string2[i]) * (n**pow);
+                var t = 0;
+                while(t < string1.length) {
+                    var pow = string1.length - t - 1;
+                    console.log("i:"+i+"  t:"+t+"  element:" + string2[i+t]);
+                    if (map.has(string2[i+t])) {
+                        console.log("b3: " + string2[i+t] + " pow: " + pow);
+                        tmp += map.get(string2[i+t]) * (n**pow);
+                        console.log("tmp[t]: "+tmp);
+                        t++;
+                    } else {
+                        latest_one = null;
+                        i = i+t+1;
+                        tmp = 0
+                        break;
+                    }
+                }
+                console.log("first: "+ tmp);
+            } else {
+                console.log("burda2");
+                if (tmp != 0) {
+                    var new_char_index = i+string1.length-1;
+                    console.log("new index: " + new_char_index);
+                    tmp = (tmp - latest_one)* n + map.get(string2[new_char_index]);
+                    console.log("sec: " + tmp);
+                }
+                
+            }
+
+            if (tmp == target) {
+                console.log("found!");
+                return i;
+            }
+        }
+        else {
+            latest_one = null;
+        }
+
+    }
+
+}
+
+console.log(findSubstring("bb", "abbabb"));
+//console.log(gridChallenge(["nyx",  "ynx","xyt"]));
 //dynamicArray(2, [[1, 0, 5], [1, 1, 7], [1, 0, 3],[2, 1, 0],[2, 1, 1]])
 //console.log(maxMin(3, [100,200,300,350,400,401,402]));
 //console.log(caesarCipher("DNFjxo?b5h*5<LWbgs6?V5{3M].1hG)pv1VWq4(!][DZ3G)riSJ.CmUj9]7Gzl?VyeJ2dIPEW4GYW*scT8(vhu9wCr]q!7eyaoy.", 45))
