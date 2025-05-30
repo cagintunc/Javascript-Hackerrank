@@ -749,6 +749,23 @@ function isPermutation(string1, string2) {
     return tmp == target;
 }
 
+function URLify(string) {
+    var new_string = "";
+    var is_emp_before = false;
+    for(var i = 0; i < string.length; i++) {
+        if(string[i] === " " && (!is_emp_before)) {
+            new_string += "%20";
+            is_emp_before = true;
+        } else if(string[i] !== " ") {
+            new_string += string[i];
+            is_emp_before = false;
+        } 
+    }
+    return new_string;
+}
+
+console.log(URLify("hello cagin   ben j "));
+
 //console.log(isPermutation("abcdaabc", "cabbadad"));
 //console.log(isUnique("as0dfghjl234567890"));
 //findSubstring("bb", "abbabbaabbbc");
