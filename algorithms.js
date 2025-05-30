@@ -644,24 +644,28 @@ function findSubstring(string1, string2) {
     console.log("target: " + target);
     var latest_one = null;
     var tmp = 0;
-    for(var i = 0; i < string2.length-string1.length+1; i++) {
+    var i = 0;
+    while(i < string2.length-string1.length+1) {
+        var changed = 0;
         if (map.has(string2[i])) {
+            console.log("burda111");
+            
             if (!latest_one) {
-                
                 latest_one = map.get(string2[i]) * (n**pow);
                 var t = 0;
                 while(t < string1.length) {
                     var pow = string1.length - t - 1;
                     console.log("i:"+i+"  t:"+t+"  element:" + string2[i+t]);
                     if (map.has(string2[i+t])) {
-                        console.log("b3: " + string2[i+t] + " pow: " + pow);
                         tmp += map.get(string2[i+t]) * (n**pow);
                         console.log("tmp[t]: "+tmp);
                         t++;
                     } else {
                         latest_one = null;
                         i = i+t+1;
-                        tmp = 0
+                        tmp=0;
+                        console.log("new i:" + i + " tmp: " + tmp);
+                        changed=1;
                         break;
                     }
                 }
@@ -671,26 +675,83 @@ function findSubstring(string1, string2) {
                 if (tmp != 0) {
                     var new_char_index = i+string1.length-1;
                     console.log("new index: " + new_char_index);
-                    tmp = (tmp - latest_one)* n + map.get(string2[new_char_index]);
-                    console.log("sec: " + tmp);
+                    if (map.has(string2[new_char_index])) {
+                        tmp = (tmp - latest_one)* n + map.get(string2[new_char_index]);
+                        console.log("sec: " + tmp);
+                        latest_one = map.get(string2[i+1]) * (n**pow);
+                    } 
+                    else {
+                        i = new_char_index+1;
+                    }
+                    
+                
                 }
                 
             }
 
             if (tmp == target) {
-                console.log("found!");
-                return i;
+                console.log("found! index="+i);
             }
+            
         }
         else {
+            console.log("burda222");
             latest_one = null;
         }
-
+        if(!changed) {
+            i++;
+        } else {
+            changed = 0;
+        }
+        console.log("last one: " + latest_one);
     }
-
 }
 
-console.log(findSubstring("bb", "abbabb"));
+
+function isUnique(x) {
+    var myMap = new Map();
+    for(var i = 0; i < x.length; i++) {
+        if(myMap.has(x[i])) {
+            return false;
+        } else {
+            myMap.set(x[i], 1);
+        }
+    }
+    return true;
+}
+
+function isPermutation(string1, string2) {
+    var hashMap = new Map();
+    var n = 1;
+    var target = 0.0;
+    if(string1.length != string2.length) {
+        return false;
+    }
+    for(var i = 0; i <string1.length; i++) {
+        if(!hashMap.has(string1[i])) {
+            hashMap.set(string1[i], n);
+            target += 10*n;
+            n++;
+        } else {
+            target += 10*hashMap.get(string1[i]);
+        }
+    }
+    console.log("string1 value: " + target);
+    var tmp = 0;
+    for(var i = 0; i < string2.length; i++) {
+        if(!hashMap.has(string2[i])) {
+            return false;
+        } else {
+            tmp += 10*hashMap.get(string2[i]);
+        }
+    }
+    console.log("string2 value: "+ tmp);
+    return tmp == target;
+}
+
+//console.log(isPermutation("abcdaabc", "cabbadad"));
+//console.log(isUnique("as0dfghjl234567890"));
+//findSubstring("bb", "abbabbaabbbc");
 //console.log(gridChallenge(["nyx",  "ynx","xyt"]));
 //dynamicArray(2, [[1, 0, 5], [1, 1, 7], [1, 0, 3],[2, 1, 0],[2, 1, 1]])
 //console.log(maxMin(3, [100,200,300,350,400,401,402]));
