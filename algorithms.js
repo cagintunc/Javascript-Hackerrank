@@ -764,8 +764,32 @@ function URLify(string) {
     return new_string;
 }
 
-console.log(URLify("hello cagin   ben j "));
+function palindromePermutation(string){
+    var stack = [];
+    var hashMap = new Map();
+    var number = 0;
+    for(var i=0; i<string.length; i++) {
+        if (string[i] !== " ") {
+            if(hashMap.has(string[i])) {
+                hashMap.set(string[i], hashMap.get(string[i])+1);
+            } else {
+                hashMap.set(string[i], 1);
+            }
+            number++;
+        }
+    }
+    
+    for (const value of hashMap.values()) {
+        if (value % 2 !== 0) {
+            stack.push(value);
+        }
+    }
+    return stack.length === 0 || ((stack.length === 1) && (number%2 !== 0));
+}
 
+
+//console.log(palindromePermutation("tactttot coa"));
+//console.log(URLify("hello cagin   ben j "));
 //console.log(isPermutation("abcdaabc", "cabbadad"));
 //console.log(isUnique("as0dfghjl234567890"));
 //findSubstring("bb", "abbabbaabbbc");
