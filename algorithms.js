@@ -787,7 +787,58 @@ function palindromePermutation(string){
     return stack.length === 0 || ((stack.length === 1) && (number%2 !== 0));
 }
 
+function isOneAway(string1, string2) {
+    if(Math.abs(string1.length - string2.length) > 1) {
+        return false;
+    }
+    [string1, string2] = (function f(a, b) {
+        if(a.length >= b.length) {
+            return [a, b];
+        } else {
+            return [b, a];
+        }
+    })(string1, string2);
+    
+    var stack = [];
+    var hash = new Map();
+    var difference = 0;
+    var previous = null;
+    for(var i=0;i<string2.length; i++) {
+        stack.push(string2[i]);
+        if(!hash.has(string2[i])) {
+            hash.set(string2[i], 1);
+        }
+    }
+    var i=0; 
+    while(i<string1.length) {
+        if(!hash.has(string1[i])) {
+            var current = stack.shift();
+            difference++;
+            if(i+1 < string1.length) {
+                if(current == string1[i+1]) {
+                   i=i+1; 
+                }
+            }
+        } else {
+            if(stack.length > 0) {
+                var current = stack.shift();
+                if(!(string1[i] === current)) {
+                    previous = current;
+                    difference++;
+                    i--;
+                }
+            } else {
+                break;
+            }
+        }
+        i++;
+        
+    }
+    console.log("difference: " + difference);
+    return difference <= 1;
+}
 
+//console.log(isOneAway("pale", "bale"));
 //console.log(palindromePermutation("tactttot coa"));
 //console.log(URLify("hello cagin   ben j "));
 //console.log(isPermutation("abcdaabc", "cabbadad"));
