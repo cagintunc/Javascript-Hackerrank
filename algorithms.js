@@ -865,8 +865,22 @@ function stringCompression(string) {
     }
 }
 
+function rotateMatrix(matrix) {
+    var result = new Array(arrayLength=matrix.length);
+    
+    for(var r=0; r<matrix.length; r++) {
+        row = new Array(arrayLength=matrix[r].length);
+        for(var c=0; c<matrix[r].length; c++) {
+            row[c] = matrix[(matrix.length-1)-c][r];
+            
+        }
+        result.push(row);
+    }
+    return result;
+}
 
-stringCompression("abbbaaac");
+console.log(rotateMatrix([[0,1,2],[3,4,5],[6,7,8]]))
+//stringCompression("abbbaaacc");
 //console.log(isOneAway("pale", "bale"));
 //console.log(palindromePermutation("tactttot coa"));
 //console.log(URLify("hello cagin   ben j "));
