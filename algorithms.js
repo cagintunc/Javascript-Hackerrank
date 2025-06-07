@@ -838,6 +838,35 @@ function isOneAway(string1, string2) {
     return difference <= 1;
 }
 
+function stringCompression(string) {
+    var compressed_length = 0;
+    var repetition = 1;
+    var previous = string[0];
+    var compressed_string = "";
+    for(var i=1; i<string.length; i++) {
+        var current = string[i];
+        if(previous === current) {
+            repetition += 1;
+        }
+        else{
+            compressed_length+=2;
+            compressed_string += string[i-1]+repetition;
+            repetition=1;
+        }
+        previous=current;
+    }
+    compressed_length+=2;
+    compressed_string+= string[string.length-1]+repetition;
+    if(compressed_length < string.length) {
+        console.log(compressed_string);
+    }
+    else {
+        console.log(string);
+    }
+}
+
+
+stringCompression("abbbaaac");
 //console.log(isOneAway("pale", "bale"));
 //console.log(palindromePermutation("tactttot coa"));
 //console.log(URLify("hello cagin   ben j "));
