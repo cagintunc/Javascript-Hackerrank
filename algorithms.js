@@ -1,3 +1,4 @@
+const { arrayBuffer } = require("stream/consumers");
 const { boolean } = require("webidl-conversions");
 
 function plusMinus(arr) {
@@ -879,7 +880,43 @@ function rotateMatrix(matrix) {
     return result;
 }
 
-console.log(rotateMatrix([[0,1,2],[3,4,5],[6,7,8]]))
+function zeroMatrix(matrix) {
+    var hash_c = new Map();
+    var result = [];
+
+    for(var r=0; r<matrix.length; r++) {
+        var row = new Array(matrix[r].length);
+        for(var c=0; c<matrix[r].length; c++) {
+            
+            if(matrix[r][c] === 0) {
+                hash_c.set(c, 0);
+                row = new Array(arrayLength=matrix[r].length).fill(0);
+                break;
+            } else {
+                if(hash_c.has(c)) {
+                    row[c] = 0;
+                }
+                else {
+                    row[c] = matrix[r][c];
+                }
+            }
+            
+        }
+        result.push(row);
+    }
+    for(var i=0; i<result.length; i++) {
+        for(var j=0; j<result[i].length; j++) {
+            if(hash_c.has(j)) {
+                result[i][j] = 0;
+            }
+        }
+    }
+    return result;
+}
+
+
+//console.log(zeroMatrix([[0,1,2,5, 11],[1,3,4,5, 3],[6,7,0,8,6], [3,5,5,7,2], [3, 7, 1, 34,-1]]));
+//console.log(rotateMatrix([[0,1,2],[3,4,5],[6,7,8]]))
 //stringCompression("abbbaaacc");
 //console.log(isOneAway("pale", "bale"));
 //console.log(palindromePermutation("tactttot coa"));
