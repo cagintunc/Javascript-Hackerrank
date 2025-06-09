@@ -914,7 +914,79 @@ function zeroMatrix(matrix) {
     return result;
 }
 
+function isSubstring2(string1, string2) {
+    class Node {
+        constructor(charr, nextt) {
+            this.charr = charr;
+            this.nextt = nextt;
+        }
+        next() {
+            return this.nextt;
+        }
+        setNext(node) {
+            this.nextt = node;
+        }
+        
+    }
+    class StringSub {
+        
+        constructor(string) {
+            this.string = string;
+            this.head = null;
+            this.end = null;   
+            var previous = new Node(null, null);
+            for(var i=0; i<string.length; i++) {
+                if(i===0) {
+                    this.head = new Node(string[i], null);
+                    previous = this.head;
+                }
+                else {
+                    previous.setNext(new Node(string[i], null));
+                    previous = previous.next();
+                }
+            }
+            this.end = previous;
+            this.end.setNext(this.head);
+        }
 
+        print() {
+            var next = null;
+            for(var i=0; i < string1.length; i++) {
+                if(i===0) {
+                    next = this.head;
+                    console.log(next.charr);
+                } else {
+                    next = next.next();
+                    console.log(next.charr);
+                }
+            }
+        }
+
+    }
+    var linked_string = new StringSub(string1);
+    var head = linked_string.head;
+    for(var i=0; i<string2.length; i++) {
+        for(var j=0; j<i; j++) {
+            head = head.next();
+        }
+        var n_match = 0;
+        for(var j=0; j<string2.length; j++) {
+            if(head.charr === string2[j]) {
+                head = head.next();
+                n_match++;
+            } else {
+                n_match=0;
+                break;
+            }
+            if(n_match === string1.length) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+//console.log(isSubstring2("waterbottle", "erbottlewat"));
 //console.log(zeroMatrix([[0,1,2,5, 11],[1,3,4,5, 3],[6,7,0,8,6], [3,5,5,7,2], [3, 7, 1, 34,-1]]));
 //console.log(rotateMatrix([[0,1,2],[3,4,5],[6,7,8]]))
 //stringCompression("abbbaaacc");
