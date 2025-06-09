@@ -986,6 +986,95 @@ function isSubstring2(string1, string2) {
     return false;
 }
 
+class Node {
+    construction() {
+        this.content = null;
+        this.next = null;
+    }
+    
+    setNext(next) {
+        this.next = next;
+    }
+    setContent(content) {
+        this.content = content;
+    }
+    getContent() {
+        return this.content;
+    }
+    getNext() {
+        return this.next;
+    }
+}
+
+class LinkedListSingle{
+    construction() {
+        this.head = null;
+        this.end = null;
+        this.size = 0;
+    }
+    push(content) { // O(1)
+        
+        if(!this.head) {
+            this.head = new Node();
+            this.head.setContent(content);
+            this.end = this.head;
+        } else {
+            var newNode = new Node();
+            newNode.setContent(content);
+            if(this.end) {
+                this.end.setNext(newNode);
+                this.end = this.end.getNext();
+            }
+            else {
+                this.end = newNode;
+            }
+            
+        }
+        this.size++;
+    }
+    dequeue() { // O(1)
+        let result = this.head;
+        this.head = this.head.getNext();
+        return result;
+    }
+    display() {
+        var tmp = this.head;
+        while(tmp) {
+            console.log(tmp.getContent());
+            tmp = tmp.getNext();
+        }
+    }
+    remove(content) { // O(N)
+        var result = null;
+        var tmp = this.head;
+        var prev = null;
+        while(tmp) {
+            if(tmp.getContent() === content) {
+                result = tmp;
+                if(!prev) {
+                    this.head = tmp.getNext();
+
+                } else {
+                    previous.setNext(tmp.getNext());
+                }
+                break;
+            } else {
+                tmp = tmp.getNext();
+            }
+        }
+        return result;
+    }
+    getLast() { // O(1)
+        var result = null;
+        if(this.end) {
+            result = this.end;
+        }
+        return result;
+    }
+    
+}
+
+
 //console.log(isSubstring2("waterbottle", "erbottlewat"));
 //console.log(zeroMatrix([[0,1,2,5, 11],[1,3,4,5, 3],[6,7,0,8,6], [3,5,5,7,2], [3, 7, 1, 34,-1]]));
 //console.log(rotateMatrix([[0,1,2],[3,4,5],[6,7,8]]))
