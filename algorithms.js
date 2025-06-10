@@ -1007,11 +1007,18 @@ class Node {
 }
 
 class LinkedListSingle{
-    construction() {
+    constructor(list=null) {
         this.head = null;
         this.end = null;
         this.size = 0;
+        if(list) {
+            for(var i=0; i<list.length; i++) {
+                this.push(list[i]);
+                this.size++;
+            }
+        }
     }
+
     push(content) { // O(1)
         
         if(!this.head) {
@@ -1071,10 +1078,40 @@ class LinkedListSingle{
         }
         return result;
     }
-    
 }
 
+function removeDups(list) { // O(N)
+    var hash = new Map();
+    var head = list.head;
+    var prev = null;
+    while(head) {
+        if(hash.has(head.getContent())) {
+            prev.setNext(head.getNext());
+        } else {
+            hash.set(head.getContent(), 0);
+            prev = head;
+        }
+        head = head.getNext();      
+    }
+}
 
+function getKLast(list, k) { // O(N)
+    var hash = new Map();
+    var head = list.head;
+    var n = 1;
+
+    while(head) {
+        hash.set(n, head);
+        head = head.getNext();
+        n++;
+    }
+    return hash.get(n-k);
+}
+
+list = new LinkedListSingle([1,55,3,21,3,5,32,7,81,17,4,3,4,21]);
+console.log("Before:");
+list.display();
+//console.log("K-th from last: "+getKLast(list, 3).getContent());
 //console.log(isSubstring2("waterbottle", "erbottlewat"));
 //console.log(zeroMatrix([[0,1,2,5, 11],[1,3,4,5, 3],[6,7,0,8,6], [3,5,5,7,2], [3, 7, 1, 34,-1]]));
 //console.log(rotateMatrix([[0,1,2],[3,4,5],[6,7,8]]))
