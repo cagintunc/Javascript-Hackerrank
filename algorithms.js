@@ -1108,9 +1108,20 @@ function getKLast(list, k) { // O(N)
     return hash.get(n-k);
 }
 
+function deleteMiddleNode(node) {
+    while(node.getNext().getNext()) {
+        node.setContent(node.getNext().getContent());
+        node = node.getNext();
+    }
+    node.setContent(node.getNext().getContent());
+    node.setNext(null);
+} 
+
 list = new LinkedListSingle([1,55,3,21,3,5,32,7,81,17,4,3,4,21]);
 console.log("Before:");
 list.display();
+console.log("After:");
+
 //console.log("K-th from last: "+getKLast(list, 3).getContent());
 //console.log(isSubstring2("waterbottle", "erbottlewat"));
 //console.log(zeroMatrix([[0,1,2,5, 11],[1,3,4,5, 3],[6,7,0,8,6], [3,5,5,7,2], [3, 7, 1, 34,-1]]));
