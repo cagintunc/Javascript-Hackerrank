@@ -1108,7 +1108,7 @@ function getKLast(list, k) { // O(N)
     return hash.get(n-k);
 }
 
-function deleteMiddleNode(node) {
+function deleteMiddleNode(node) { // O(N)
     while(node.getNext().getNext()) {
         node.setContent(node.getNext().getContent());
         node = node.getNext();
