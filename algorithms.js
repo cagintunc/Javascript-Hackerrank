@@ -1117,10 +1117,52 @@ function deleteMiddleNode(node) { // O(N)
     node.setNext(null);
 } 
 
+function partitionNode(node, partition) {
+    var left = null;
+    var right = null;
+    var right_head = right;
+    var left_head = left;
+    var current = node;
+
+    while(current){
+        if(current.getContent() >= partition) {
+            if(right) {
+                right.setNext(current);
+                right = right.getNext();
+            } else {
+                right = current;
+                right_head = right;
+            }
+        } else {
+            if(left) {
+                left.setNext(current);
+                left = left.getNext();
+            } else {
+                left = current;
+                left_head = left;
+            }
+        }
+        current = current.getNext();
+    }
+    return [left_head, right_head];
+}
+
+function displayNode(node) {
+    var head = node;
+    while(head) {
+        console.log(head.getContent());
+        head = head.getNext();
+    }
+}
+
 list = new LinkedListSingle([1,55,3,21,3,5,32,7,81,17,4,3,4,21]);
 console.log("Before:");
 list.display();
 console.log("After:");
+var [left, right] = partitionNode(list.head, 7);
+displayNode(left);
+console.log("###");
+displayNode(right);
 
 //console.log("K-th from last: "+getKLast(list, 3).getContent());
 //console.log(isSubstring2("waterbottle", "erbottlewat"));
