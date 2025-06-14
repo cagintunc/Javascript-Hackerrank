@@ -1117,7 +1117,7 @@ function deleteMiddleNode(node) { // O(N)
     node.setNext(null);
 } 
 
-function partitionNode(node, partition) {
+function partitionNode(node, partition) { // O(N)
     var left = null;
     var right = null;
     var right_head = right;
@@ -1147,15 +1147,18 @@ function partitionNode(node, partition) {
     return [left_head, right_head];
 }
 
-function displayNode(node) {
+function displayNode(node) { // O(N)
     var head = node;
+    var results = "";
     while(head) {
-        console.log(head.getContent());
+        results += head.getContent();
         head = head.getNext();
+        if(head) results += " -> "
     }
+    console.log(results);
 }
 
-function sumListsReverse(number1, number2) {
+function sumListsReverse(number1, number2) { // O(A+B)
     var head = new Node();
     var head_head = head;
     var checksum = 0;
@@ -1163,7 +1166,6 @@ function sumListsReverse(number1, number2) {
         var a = number1.getContent();
         var b = number2.getContent();
         var sum = a+b+checksum;
-        console.log("sum: " + sum);
         var current = null;
         if(sum > 9) {
             checksum = 1;
@@ -1177,6 +1179,7 @@ function sumListsReverse(number1, number2) {
         head = head.getNext();
         number1 = number1.getNext();
         number2 = number2.getNext();
+        
     }
     while(number1) {
         var a = number1.getContent();
@@ -1190,9 +1193,12 @@ function sumListsReverse(number1, number2) {
             checksum = 0;
         }
         head.setContent(current);
-        head.setNext(new Node());
-        head = head.getNext();
         number1 = number1.getNext();
+        if(number1) {
+            head.setNext(new Node());
+            head = head.getNext();
+        }
+        
     }
 
     while(number2) {
@@ -1207,38 +1213,79 @@ function sumListsReverse(number1, number2) {
             checksum = 0;
         }
         head.setContent(current);
-        head.setNext(new Node());
-        head = head.getNext();
         number2 = number2.getNext();
+        if(number2) {
+            head.setNext(new Node());
+            head = head.getNext();
+        }
     }
     if(checksum === 1) {
         head.setContent(1);
     }
-
-    displayNode(head_head);
+    return head_head;
 }
 
 
-function sumListsForward(number1, number2) {
+function sumListsForward(number1, number2) { // O(A+B)
     //2 -> 1 -> 2 -> 3 
     //     3 -> 8 -> 7
-    var queue1 = new LinkedListSingle();
-    var queue2 = new LinkedListSingle();
+    var stack1 = [];
+    var stack2 = [];
     var head1 = number1;
     var head2 = number2;
     var reversed1 = new Node();
+    var rvs1_head = reversed1;
     var reversed2 = new Node();
+    var rvs2_head = reversed2;
 
     while(head1) {
-        queue1.push(head1.getContent());
+        stack1.push(head1.getContent());
         head1 = head1.getNext();
     }
     while(head2) {
-        queue2.push(head2.getContent());
+        stack2.push(head2.getContent());
         head2 = head2.getNext();
     }
+    var popped = stack1.pop();
+    while(popped) {
+        reversed1.setContent(popped);
+        popped = stack1.pop();
+        if(popped) {
+            reversed1.setNext(new Node());
+            reversed1 = reversed1.getNext();
+        }
+    }
+
+    popped = stack2.pop();
+    while(popped) {
+        reversed2.setContent(popped);
+        popped = stack2.pop();
+        if(popped) {
+            reversed2.setNext(new Node());
+            reversed2 = reversed2.getNext();
+        }
+    }
+
+    var reversed = sumListsReverse(rvs1_head, rvs2_head);
+    var stack = [];
+    var final_result = new Node();
+    var head_final = final_result;
+
+    while(reversed) {
+        stack.push(reversed.getContent());
+        reversed = reversed.getNext();
+    }
     
-    
+    popped = stack.pop();
+    while(popped) {
+        final_result.setContent(popped);
+        popped = stack.pop();
+        if(popped) {
+            final_result.setNext(new Node());
+            final_result = final_result.getNext();
+        }
+    }
+    return head_final;
 }
 
 
@@ -1247,7 +1294,8 @@ list_2 = new LinkedListSingle([1,8,4,8]);
 console.log("Before:");
 
 console.log("After:");
-sumListsForward(list_1.head, list_2.head);
+var result = sumListsForward(list_1.head, list_2.head);
+displayNode(result);
 
 //console.log("K-th from last: "+getKLast(list, 3).getContent());
 //console.log(isSubstring2("waterbottle", "erbottlewat"));
