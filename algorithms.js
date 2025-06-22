@@ -1287,15 +1287,37 @@ function sumListsForward(number1, number2) { // O(A+B)
     }
     return head_final;
 }
+function isPalindromeList(list) { // O(N)
+    var current = list.head;
+    var queue = [];
+    var stack = [];
+    while(current) {
+        var cont = current.getContent()
+        queue.push(cont);
+        stack.push(cont);
+        current = current.getNext();
+    }
+    while(queue.length > 0 && stack.length > 0) {
+        var deq = queue.shift();
+        var popped = stack.pop();
+        if(deq !== popped) {
+            return false;
+        }
+    }
+    return true;
+}
 
 
-list_1 = new LinkedListSingle([1,2,9]);
-list_2 = new LinkedListSingle([1,8,4,8]);
-console.log("Before:");
 
-console.log("After:");
-var result = sumListsForward(list_1.head, list_2.head);
-displayNode(result);
+
+list_1 = new LinkedListSingle([1,2,9,10,9,2,1]);
+//list_2 = new LinkedListSingle([1,8,4,8]);
+//console.log("Before:");
+//
+//console.log("After:");
+//var result = sumListsForward(list_1.head, list_2.head);
+//displayNode(result);
+console.log(isPalindromeList(list_1));
 
 //console.log("K-th from last: "+getKLast(list, 3).getContent());
 //console.log(isSubstring2("waterbottle", "erbottlewat"));
