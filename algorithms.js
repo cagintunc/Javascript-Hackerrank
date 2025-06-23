@@ -1307,17 +1307,110 @@ function isPalindromeList(list) { // O(N)
     return true;
 }
 
+function swap(x1, x2) { // O(1)
+    var tmp = x1;
+    x1 = x2;
+    x2 = tmp;
+    return x1, x2;
+}
+
+function getLongestListFirst(list1, list2) { // O(A+B)
+    var len_1 = 0;
+    var len_2 = 0;
+    var head_1 = list1.head;
+    var head_2 = list2.head;
+    while(head_1) {
+        len_1++;
+        head_1 = head_1.getNext();
+    }
+    while(head_2) {
+        len_2++;
+        head_2 = head_2.getNext();
+    }
+    if(len_2 > len_1) {
+        list1, list2 = swap(list1, list2);
+        len_1, len_2 = len_2, len_1;
+    }
+    return [list1, list2, len_1, len_2];
+}
+
+function getIntersection(list_1, list_2) { // O(A+B)
+    var len_1 = 0; 
+    var len_2 = 0;
+    [list_1, list_2, len_1, len_2] = getLongestListFirst(list_1, list_2);
+    var hash = new Map();
+    var full_string = "1234567890*-qwertyuopasdfghjklizxcvbnm.,;_-?:"
+    var base = full_string.length;
+    for(var i=0; i<base;i++) {
+        hash.set(full_string[i], i);
+    }
+
+    var head_1 = list_1.head;
+    var head_2 = list_2.head;
+    while(len_1 > len_2) {
+        head_1 = head_1.getNext();
+        len_1--;
+    }
+    
+    var target_1 = 0;
+    var target_2 = 0;
+    var index = 0;
+    var array_1 = [];
+    var array_2 = [];
+
+    while(head_1) {
+        var add = (base**(len_1-index))*hash.get(head_1.getContent());
+        array_1.push(add);
+        target_1 += add;
+        head_1 = head_1.getNext();
+        index++;
+    }
+    index = 0;
+    while(head_2) {
+        var add = (base**(len_2-index))*hash.get(head_2.getContent());
+        array_2.push(add);
+        target_2 += add;
+        head_2 = head_2.getNext();
+        index++;
+    }
+    
+    var start = 0;
+    var is_found = false;
+
+    for(index=0; index<array_1.length; index++) {
+        if(target_1 == target_2) {
+            start = index-1;
+            is_found = true;
+            break;
+        }
+        var deq1 = array_1[index];
+        var deq2 = array_2[index];
+        target_1 -= deq1;
+        target_2 -= deq2;
+    }
+    if(!is_found) return null;
+    var head2 = list_2.head;
+    while(start >= 0) {
+        head2 = head2.getNext();
+        start--;
+    }
+    return head2;
+}
 
 
-
-list_1 = new LinkedListSingle([1,2,9,10,9,2,1]);
-//list_2 = new LinkedListSingle([1,8,4,8]);
+list_1 = new LinkedListSingle(["1","2","9","1","a","8","4","8"]);
+list_2 = new LinkedListSingle(["1","1","8","4","8"]);
 //console.log("Before:");
 //
 //console.log("After:");
 //var result = sumListsForward(list_1.head, list_2.head);
 //displayNode(result);
-console.log(isPalindromeList(list_1));
+var node = getIntersection(list_1, list_2);
+if(node) {
+    displayNode(node);
+}
+
+
 
 //console.log("K-th from last: "+getKLast(list, 3).getContent());
 //console.log(isSubstring2("waterbottle", "erbottlewat"));
