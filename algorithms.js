@@ -1039,6 +1039,7 @@ class LinkedListSingle{
         }
         this.size++;
     }
+  
     dequeue() { // O(1)
         let result = this.head;
         this.head = this.head.getNext();
@@ -1071,13 +1072,43 @@ class LinkedListSingle{
         }
         return result;
     }
-    getLast() { // O(1)
+    peek() { // O(1)
         var result = null;
         if(this.end) {
             result = this.end;
         }
         return result;
     }
+}
+
+class Stack {
+    constructor() {
+        this.head = new Node();
+    }
+    pop() { // O(1)
+        if(this.head) {
+            var result = this.head.getContent();
+            this.head = this.head.getNext();
+            return result;
+        } else {
+            console.log("Stack is empty!");
+            return null;
+        }
+        
+    }
+    push(content) { // O(1)
+        var new_node = new Node();
+        new_node.setContent(content);
+        new_node.setNext(this.head);
+        this.head = new_node;
+    }
+    peek() { 
+        return this.head.getContent();
+    }
+    isEmpty() {
+        return this.head === null;
+    }
+
 }
 
 function removeDups(list) { // O(N)
@@ -1396,19 +1427,37 @@ function getIntersection(list_1, list_2) { // O(A+B)
     }
     return head2;
 }
+//0,1,1,2,3,5,
+function iterativeFibonnacci(x) { // O(N)
+    var stack = new Stack();
+    if(x == 0 || x == 1) return x;
+    stack.push(0);
+    stack.push(1)
+    for(var i=2; i<x; i++) {
+        var f1 = stack.pop();
+        var f2 = stack.peek();
+        stack.push(f1);
+        stack.push(f1+f2);
+    }
+    return stack.peek();
+}
+
+
 
 
 list_1 = new LinkedListSingle(["1","2","9","1","a","8","4","8"]);
-list_2 = new LinkedListSingle(["1","1","8","4","8"]);
+//console.log(iterativeFibonnacci(8));
+
+//list_2 = new LinkedListSingle(["1","1","8","4","8"]);
 //console.log("Before:");
 //
 //console.log("After:");
 //var result = sumListsForward(list_1.head, list_2.head);
 //displayNode(result);
-var node = getIntersection(list_1, list_2);
-if(node) {
-    displayNode(node);
-}
+//var node = getIntersection(list_1, list_2);
+//if(node) {
+  //  displayNode(node);
+//}
 
 
 
