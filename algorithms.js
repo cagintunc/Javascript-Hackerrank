@@ -1101,8 +1101,60 @@ class Stack {
         new_node.setContent(content);
         new_node.setNext(this.head);
         this.head = new_node;
+        
     }
     peek() { 
+        return this.head.getContent();
+    }
+    isEmpty() {
+        return this.head === null;
+    }
+
+}
+
+class StackWithMin {
+    constructor() {
+        this.head = null;
+        this.min = 100000;
+    }
+    push(content) { // O(N)
+        if(this.head === null) {
+            this.head = new Node();
+            this.head.setContent(content);
+        }
+        else {
+            var node = new Node();
+            node.setContent(content);
+            node.setNext(this.head);
+            this.head = node;
+        }
+        if(this.min > content) {
+            this.min = content;
+        }
+    }
+    pop() {
+        var result = null;
+        if(this.head) {
+            result = this.head.getContent();
+            this.head = this.head.getNext();
+            if(this.min == result) {
+                var tmp = this.head;
+                var new_min = 100000;
+                while(tmp) {
+                    var current_content = tmp.getContent();
+                    if(current_content < new_min) {
+                        new_min = current_content;
+                    }
+                    tmp = tmp.getNext();
+                } 
+                this.min = new_min;
+            }
+        } else {
+            console.log("Stack is empty!");
+        }
+        return result;
+    }
+    peek() {
         return this.head.getContent();
     }
     isEmpty() {
@@ -1442,8 +1494,117 @@ function iterativeFibonnacci(x) { // O(N)
     return stack.peek();
 }
 
+class StackOfStacks {
+    constructor(max) {
+        this.max = max;
+        this.head = null;
+        this.stackOfStack = new Stack();
+        this.total_count = 0;
+        this.last_stack_count = 0;
+        this.stackOfStackCount = 0;
+        
+    }
+    push(content) {
+        if(this.head === null)  {
+            this.head = new Node();
+            this.head.setContent(content);
+            this.last_stack_count++;
+        } else {
+            if(this.last_stack_count === this.max) {
+                this.stackOfStack.push(this.head);
+                this.stackOfStackCount++;
+
+                this.head = new Node();
+                var new_node = new Node();
+                new_node.setContent(content);
+                new_node.setNext(this.head);
+                this.head = new_node;
+                this.last_stack_count = 1;
+                
+                
+            } else {
+                var new_node = new Node();
+                new_node.setContent(content);
+                new_node.setNext(this.head);
+                this.head = new_node;
+                this.last_stack_count++;
+
+            }
+        }
+        this.total_count++;
+    }
+    pop() {
+        var result = null;
+        if(this.total_count === 0) {
+            console.log("Stack is empty!");
+        } else {
+            if(this.last_stack_count === 1) {
+                result = this.head.getContent();
+                this.head = this.stackOfStack.pop();
+                this.stackOfStackCount--;
+                this.last_stack_count = this.stackOfStack.last_stack_count;
+
+            } else {
+                result = this.head.getContent();
+                this.head = this.head.getNext();
+                this.last_stack_count--;
+            }
+
+            this.total_count--;
+        }
+        return result;
+    }
+    popAt(index) {
+        var counter = 0;
+        var tmp_stack = this.stackOfStack;
+        var prev = null;
+        var tmp_head = tmp_stack.pop();
+        for(;counter < index-1; counter++){
+            prev = tmp_head;
+            tmp_head = tmp_stack.pop();
+            if(!tmp_stack) {
+                console.log("Index out of range!");
+                return;
+            }
+                
+        }
+        var result = null;
+        if(prev === null){
+            result = tmp_head.getContent();
+            tmp_head = tmp_head.getNext();
+        } else {
+            prev.setNext(tmp_head.getNext());
+            result = tmp_head.getContent();
+        }
+    
+        return result;
+    }
+}
 
 
+var stack = new StackOfStacks(3);
+stack.push(4);
+stack.push(34);
+console.log("stack count: "+stack.stackOfStackCount);
+stack.push(3);
+stack.push(8);
+stack.push(32);
+stack.push(85);
+stack.push(33);
+stack.push(88);
+stack.push(35);
+stack.push(45);
+stack.push(884);
+stack.push(354);
+stack.push(454);
+stack.push(8841);
+stack.push(3541);
+stack.push(4541)
+console.log("stack count: "+stack.stackOfStackCount);
+console.log(stack.popAt(1));
+console.log(stack.popAt(1));
+console.log(stack.popAt(1));
+console.log("stack count:"+stack.stackOfStackCount);
 
 list_1 = new LinkedListSingle(["1","2","9","1","a","8","4","8"]);
 //console.log(iterativeFibonnacci(8));
