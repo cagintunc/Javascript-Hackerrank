@@ -1011,7 +1011,9 @@ class LinkedListSingle{
         this.head = null;
         this.end = null;
         this.size = 0;
+
         if(list) {
+            var tmp = null;
             for(var i=0; i<list.length; i++) {
                 this.push(list[i]);
                 this.size++;
@@ -1047,11 +1049,59 @@ class LinkedListSingle{
     }
     display() {
         var tmp = this.head;
+        var string = "";
         while(tmp) {
-            console.log(tmp.getContent());
+            string+=tmp.getContent()
             tmp = tmp.getNext();
+            if(tmp) 
+                string+= " -> ";
         }
+        return string;
     }
+
+    removeAt(index) {
+        var tmp = this.head;
+        var result = null;
+        var prev = null;
+        var i = 0;
+        while(i < index) {
+            prev = tmp;
+            tmp = tmp.getNext();
+            i++;
+        }
+        if(prev) {
+            result = tmp.getContent();
+            prev.setNext(tmp.getNext());
+        } else {
+            result = tmp.getContent();
+            this.head = tmp.getNext();
+        }
+    
+        return result;
+    }
+
+    addAt(index, content) {
+        var node = new Node();
+        node.setContent(content);
+        var prev = null;
+        var tmp = this.head;
+        var i = 0;
+        while(i < index) {
+            prev = tmp;
+            tmp = tmp.getNext();
+            i++;
+        }
+        if(prev) {
+            prev.setNext(node);
+            node.setNext(tmp);
+        } else {
+            node.setNext(this.head);
+            this.head = node;
+        }
+        
+    }
+
+
     remove(content) { // O(N)
         var result = null;
         var tmp = this.head;
@@ -1581,34 +1631,57 @@ class StackOfStacks {
     }
 }
 
+function calculateSolution(expression) {
+    var stack_operands = new LinkedListSingle();
+    var stack_operators = new LinkedListSingle();
+    var index = 0;
+    var prev = "";
 
-var stack = new StackOfStacks(3);
-stack.push(4);
-stack.push(34);
-console.log("stack count: "+stack.stackOfStackCount);
-stack.push(3);
-stack.push(8);
-stack.push(32);
-stack.push(85);
-stack.push(33);
-stack.push(88);
-stack.push(35);
-stack.push(45);
-stack.push(884);
-stack.push(354);
-stack.push(454);
-stack.push(8841);
-stack.push(3541);
-stack.push(4541)
-console.log("stack count: "+stack.stackOfStackCount);
-console.log(stack.popAt(1));
-console.log(stack.popAt(1));
-console.log(stack.popAt(1));
-console.log("stack count:"+stack.stackOfStackCount);
+    while(index < expression.length) {
+        if(expression[index] === "/" || expression[index] === "*" || 
+            expression[index] === "-" || expression[index] === "+"){
+            stack_operators.push(expression[index]);
+            stack_operands.push(parseInt(prev));
+            
+            prev = "";
+        } else {
+            prev = prev + expression[index];
+        }
+        index++;
+    }
+    stack_operands.push(parseInt(prev));
+    prev = "";
+    
+    index = 0;
+    var operand_1 = null;
+    var operand_2 = null;
+    var operator = null;
+    while(index < stack_operators.size-1) {
+        operand_2 = stack_operands.removeAt(index+1);
+        operand_1 = stack_operands.removeAt(index);
+        operator = stack_operators.removeAt(index);
+        var result = null;
+        if(operator === "/") {
+            result = parseFloat(operand_1/operand_2);
+        }
+        else if(operator === "*") {
+            result = parseFloat(operand_1*operand_2); 
+        }
+        stack_operands.addAt(index, result);
+        index++;
+    }
+    console.log(stack_operands.display());
+    console.log(stack_operators.display());
 
-list_1 = new LinkedListSingle(["1","2","9","1","a","8","4","8"]);
+}
+//  12*2+54/34
+calculateSolution("12*3+54/34");
+
+
+//list_1 = new LinkedListSingle(["1","2","9","1","a","8","4","8"]);
+
+
 //console.log(iterativeFibonnacci(8));
-
 //list_2 = new LinkedListSingle(["1","1","8","4","8"]);
 //console.log("Before:");
 //
