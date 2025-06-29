@@ -1045,6 +1045,7 @@ class LinkedListSingle{
     dequeue() { // O(1)
         let result = this.head;
         this.head = this.head.getNext();
+        this.size--;
         return result;
     }
     display() {
@@ -1060,23 +1061,30 @@ class LinkedListSingle{
     }
 
     removeAt(index) {
-        var tmp = this.head;
         var result = null;
-        var prev = null;
-        var i = 0;
-        while(i < index) {
-            prev = tmp;
-            tmp = tmp.getNext();
-            i++;
-        }
-        if(prev) {
-            result = tmp.getContent();
-            prev.setNext(tmp.getNext());
-        } else {
-            result = tmp.getContent();
-            this.head = tmp.getNext();
-        }
+        if(index < this.size) {
+            var tmp = this.head;
+            
+            var prev = null;
+            var i = 0;
+            while(i < index) {
+                prev = tmp;
+                tmp = tmp.getNext();
+                i++;
+            }
+            if(prev) {
+                result = tmp.getContent();
+                prev.setNext(tmp.getNext());
+            } else {
+                result = tmp.getContent();
+                this.head = tmp.getNext();
+            }
+            this.size--;
     
+        }
+        else {
+            console.log("ERROR! Index is out of the list size");
+        }
         return result;
     }
 
@@ -1098,6 +1106,7 @@ class LinkedListSingle{
             node.setNext(this.head);
             this.head = node;
         }
+        this.size++;
         
     }
 
@@ -1120,6 +1129,7 @@ class LinkedListSingle{
                 tmp = tmp.getNext();
             }
         }
+        this.size--;
         return result;
     }
     peek() { // O(1)
@@ -1656,26 +1666,53 @@ function calculateSolution(expression) {
     var operand_1 = null;
     var operand_2 = null;
     var operator = null;
-    while(index < stack_operators.size-1) {
+    while(index < stack_operators.size) {
         operand_2 = stack_operands.removeAt(index+1);
         operand_1 = stack_operands.removeAt(index);
         operator = stack_operators.removeAt(index);
+
         var result = null;
         if(operator === "/") {
             result = parseFloat(operand_1/operand_2);
+            stack_operands.addAt(index, result);
+            index--;
         }
         else if(operator === "*") {
             result = parseFloat(operand_1*operand_2); 
+            stack_operands.addAt(index, result);
+            index--;
+        }
+        else {
+            stack_operands.addAt(index, operand_1);
+            stack_operands.addAt(index+1, operand_2);
+            stack_operators.addAt(index, operator);
+        }
+        index++;
+        
+    }
+    
+    
+    index = 0;
+    while(index < stack_operators.size) {
+        operand_2 = stack_operands.removeAt(index+1);
+        operand_1 = stack_operands.removeAt(index);
+        operator = stack_operators.removeAt(index);
+        
+        var result = null;
+        if(operator === "+") {
+            result = parseFloat(operand_1+operand_2);
+            index--;
+        } else if(operator === "-") {
+            result = parseFloat(operand_1-operand_2);
+            index--;
         }
         stack_operands.addAt(index, result);
         index++;
     }
-    console.log(stack_operands.display());
-    console.log(stack_operators.display());
-
+    return stack_operands.removeAt(0);
 }
-//  12*2+54/34
-calculateSolution("12*3+54/34");
+
+console.log(calculateSolution("12*3+54-4/34"));
 
 
 //list_1 = new LinkedListSingle(["1","2","9","1","a","8","4","8"]);
