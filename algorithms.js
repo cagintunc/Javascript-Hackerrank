@@ -1689,8 +1689,7 @@ function calculateSolution(expression) {
         }
         index++;
         
-    }
-    
+    } 
     
     index = 0;
     while(index < stack_operators.size) {
@@ -1712,12 +1711,275 @@ function calculateSolution(expression) {
     return stack_operands.removeAt(0);
 }
 
-console.log(calculateSolution("12*3+54-4/34"));
 
+class BinaryTreeNodeSingleLink {
+    constructor(content=null, left=null, right=null){
+        this.content = content;
+        this.left = left;
+        this.right = right;
+    }
+    setLeft(left) {
+        this.left = left;
+    }
+    setRight(right) {
+        this.right = right;
+    }
+    setContent(content) {
+        this.content = content;
+    }
+    getContent() {
+        return this.content;
+    }
+    getLeft() {
+        return this.left;
+    }
+    getRight() {
+        return this.right;
+    }
+}
 
+class BinarySearchTree { // Single Linked Node is used
+    constructor() {
+        this.root = null;
+        this.number_of_nodes = 0;
+    }
+    add(content) {
+        var node = new BinaryTreeNodeSingleLink(content=content);
+        if(this.root === null) {
+            this.root = node;
+        } else {
+            var tmp = this.root;
+            var parent = null;
+            while(tmp) {
+                parent = tmp;
+                if(tmp.getContent() < content) 
+                    tmp = tmp.getRight();
+                else tmp = tmp.getLeft();
+            }
+            if(parent.getContent() < content) {
+                parent.setRight(node);
+            } else {
+                parent.setLeft(node);
+            }
+        }
+    }
+    inOrder(node=this.root) {
+        if(node != null) {
+            this.inOrder(node.getLeft());
+            console.log(node.getContent());
+            this.inOrder(node.getRight());
+        }
+    }
+    pre_order(node=this.root) {
+        if(node != null) {
+            console.log(node.getContent());
+            this.pre_order(node.getLeft());
+            this.pre_order(node.getRight());
+        }
+    }
+    post_order(node=this.root) {
+        if(node != null) {
+            this.post_order(node.getLeft());
+            this.post_order(node.getRight());
+            console.log(node.getContent());
+        }
+    }
+}
+
+class BinaryTreeNodeDoubleLink {
+    constructor(content=null,
+        parent=null,
+        left=null,
+        right=null
+    ) {
+        this.content = content;
+        this.parent = parent;
+        this.left = left;
+        this.right = right;
+    }
+
+    setParent(parent) {
+        this.parent = parent;
+    }
+
+    setLeft(left) {
+        this.left = left;
+    }
+
+    setRight(right) {
+        this.right = right;
+    }
+
+    setContent(content) {
+        this.content = content;
+    }
+
+    getContent() {
+        return this.content;
+    }
+
+    getParent() {
+        return this.parent;
+    }
+
+    getLeft() {
+        return this.left;
+    }
+
+    getRight() {
+        return this.right;
+    }
+
+}
+
+class MinHeap {
+    constructor() {
+        this.root = null;
+        this.size = 0;
+    }
+
+    insert(content) {
+        if(this.root === null) {
+            this.root = new BinaryTreeNodeDoubleLink(content=content);
+        }
+        else {
+            var tmp = this.root;
+            var new_node = new BinaryTreeNodeDoubleLink(content=content);
+            var parent = this.getParentOfFirstSpot(this.root);
+            if(parent.getLeft()===null) {
+                parent.setLeft(new_node);
+            } else {
+                parent.setRight(new_node);
+            }
+            new_node.setParent(parent);
+            this.bubble_up(new_node);
+            
+        }
+        this.size++;
+    }
+    bubble_up(node) {  // O(logN)
+        var parent = node.getParent();
+        while(parent) {
+            if(parent.getContent() > node.getContent()) {
+                var tmp = parent.getContent();
+                parent.setContent(node.getContent());
+                node.setContent(tmp);
+                node = parent;
+                parent = parent.getParent();
+            } else {
+                break;
+            } 
+        }
+    }
+
+    getParentOfFirstSpot(tmp) { // O(logN)
+        var parent = null;
+        while(tmp) {
+            parent = tmp;
+            tmp = tmp.getRight();
+        }
+        tmp = parent;
+        while(tmp) {
+            parent = tmp;
+            tmp = tmp.getLeft();
+        }
+        return parent;
+    }
+    
+    getMin() { // O(1)
+        return this.root.getContent();
+    }
+
+    bubble_down(node) {
+        while(node.getRight()) {
+            var left = node.getLeft();
+            var right = node.getRight();
+            if(left.getContent() >= right.getContent()) {
+                if(node.getContent() > right.getContent()) {
+                    var tmp = node.getContent();
+                    node.setContent(right.getContent());
+                    right.setContent(tmp);
+                    node = node.getRight();
+                } else {
+                    return;
+                }
+            } else {
+                if(node.getContent() > left.getContent()) {
+                    var tmp = node.getContent();
+                    node.setContent(left.getContent());
+                    left.setContent(tmp);
+                    node = node.getLeft();
+                } else {
+                    return;
+                }
+            }
+        }
+        while(node.getLeft()) {
+            
+            var left = node.getLeft();
+            if(left.getContent() < node.getContent()) {
+                var tmp = left.getContent();
+                left.setContent(node.getContent());
+                node.setContent(tmp);
+            }
+            node = node.getLeft();
+        }
+    }
+
+    extractMin() {
+        var result = this.root.getContent();
+        var last = this.getParentOfFirstSpot(this.root);
+        this.root.setContent(last.getContent());
+        var parent = last.getParent();
+        if(parent.getRight() && parent.getRight().getContent() === last.getContent()) {
+            parent.setRight(null);
+        } else {
+            parent.setLeft(null);
+        }
+        last.setParent(null);
+        
+        this.bubble_down(this.root);
+        return result;
+    }
+
+    postOrder(node=this.root) {
+        if(node != null) {
+            this.postOrder(node.getLeft());
+            this.postOrder(node.getRight());
+            console.log(node.getContent());
+        }
+    }
+    
+
+}
+
+var minHeap = new MinHeap();
+minHeap.insert(29);
+minHeap.insert(6);
+minHeap.insert(30);
+minHeap.insert(12);
+minHeap.insert(3);
+minHeap.postOrder();
+console.log(" ");
+minHeap.extractMin();
+minHeap.postOrder();
+
+console.log(" ");
+minHeap.extractMin();
+minHeap.postOrder();
+
+//var binaryTree = new BinarySearchTree();
+//binaryTree.add(5);
+//binaryTree.add(34);
+//binaryTree.add(3);
+//binaryTree.add(4);
+//binaryTree.add(10);
+
+//binaryTree.inOrder();
+//binaryTree.pre_order();
+
+//console.log(calculateSolution("12*3+54-4/34"));
 //list_1 = new LinkedListSingle(["1","2","9","1","a","8","4","8"]);
-
-
 //console.log(iterativeFibonnacci(8));
 //list_2 = new LinkedListSingle(["1","1","8","4","8"]);
 //console.log("Before:");
@@ -1729,9 +1991,6 @@ console.log(calculateSolution("12*3+54-4/34"));
 //if(node) {
   //  displayNode(node);
 //}
-
-
-
 //console.log("K-th from last: "+getKLast(list, 3).getContent());
 //console.log(isSubstring2("waterbottle", "erbottlewat"));
 //console.log(zeroMatrix([[0,1,2,5, 11],[1,3,4,5, 3],[6,7,0,8,6], [3,5,5,7,2], [3, 7, 1, 34,-1]]));
