@@ -1838,12 +1838,11 @@ class MinHeap {
         this.size = 0;
     }
 
-    insert(content) {
+    insert(content) { // O(logN)
         if(this.root === null) {
             this.root = new BinaryTreeNodeDoubleLink(content=content);
         }
         else {
-            var tmp = this.root;
             var new_node = new BinaryTreeNodeDoubleLink(content=content);
             var parent = this.getParentOfFirstSpot(this.root);
             if(parent.getLeft()===null) {
@@ -1890,7 +1889,7 @@ class MinHeap {
         return this.root.getContent();
     }
 
-    bubble_down(node) {
+    bubble_down(node) { // O(logN)
         while(node.getRight()) {
             var left = node.getLeft();
             var right = node.getRight();
@@ -1926,7 +1925,7 @@ class MinHeap {
         }
     }
 
-    extractMin() {
+    extractMin() { // O(logN)
         var result = this.root.getContent();
         var last = this.getParentOfFirstSpot(this.root);
         this.root.setContent(last.getContent());
