@@ -1832,6 +1832,80 @@ class BinaryTreeNodeDoubleLink {
 
 }
 
+
+class MaxHeap {
+    constructor() {
+        this.root = null;
+        this.size = 0;
+    }
+
+    insert(content) {
+        if(this.root === null) {
+            this.root = new BinaryTreeNodeDoubleLink(content=content);
+        } else {
+            var new_node = new BinaryTreeNodeDoubleLink(content=content);
+            var parent = this.getParentOfFirstSpot(this.root);
+            if(!parent.getLeft()) {
+                parent.setLeft(new_node);
+            } else {
+                parent.setRight(new_node);
+            }
+            new_node.setParent(parent);
+            this.bubble_up(new_node);
+        }
+        this.size++;
+    }
+
+    bubble_up(node) {
+        var parent = null;
+        while(node.getParent()) {
+            parent = node.getParent();
+            if(parent.getContent() < node.getContent()) {
+                var tmp = parent.getContent();
+                parent.setContent(node.getContent());
+                node.setContent(tmp);
+            }
+            node = parent;
+        }
+    }
+
+    getParentOfFirstSpot(root=this.root) {
+        var parent = null;
+        var tmp = root;
+        while(tmp) {
+            parent = tmp;
+            tmp = tmp.getRight();
+        }
+        tmp = parent;
+        while(tmp) {
+            parent = tmp;
+            tmp = tmp.getLeft();
+        }
+        return parent;
+    }
+
+    inOrder(root=this.root) {
+        if(root === null) {
+            return;
+        } else {
+            this.inOrder(root.getLeft());
+            console.log(root.getContent());
+            this.inOrder(root.getRight());
+        }
+    }
+
+    preOrder(root=this.root) {
+        if(root === null) {
+            return;
+        } else {
+            console.log(root.getContent());
+            this.preOrder(root.getLeft());
+            this.preOrder(root.getRight());
+        }
+    }
+
+}
+
 class MinHeap {
     constructor() {
         this.root = null;
@@ -1952,20 +2026,20 @@ class MinHeap {
 
 }
 
-var minHeap = new MinHeap();
+var minHeap = new MaxHeap();
 minHeap.insert(29);
 minHeap.insert(6);
 minHeap.insert(30);
 minHeap.insert(12);
 minHeap.insert(3);
-minHeap.postOrder();
-console.log(" ");
-minHeap.extractMin();
-minHeap.postOrder();
+minHeap.preOrder();
+//console.log(" ");
+//minHeap.extractMin();
+//minHeap.preOrder();
 
-console.log(" ");
-minHeap.extractMin();
-minHeap.postOrder();
+//console.log(" ");
+//minHeap.extractMin();
+//minHeap.postOrder();
 
 //var binaryTree = new BinarySearchTree();
 //binaryTree.add(5);
